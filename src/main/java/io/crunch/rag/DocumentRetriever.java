@@ -1,6 +1,5 @@
 package io.crunch.rag;
 
-import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -14,8 +13,11 @@ import org.jboss.resteasy.reactive.RestResponse;
 @Consumes(MediaType.APPLICATION_JSON)
 public class DocumentRetriever {
 
-    @Inject
-    RagAssistant ragAssistant;
+    private final RagAssistant ragAssistant;
+
+    public DocumentRetriever(RagAssistant ragAssistant) {
+        this.ragAssistant = ragAssistant;
+    }
 
     @GET
     public RestResponse<String> retrieve(@RestQuery String question) {

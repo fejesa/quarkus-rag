@@ -8,7 +8,6 @@ import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import io.quarkiverse.langchain4j.pgvector.PgVectorEmbeddingStore;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
-import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import static dev.langchain4j.data.document.splitter.DocumentSplitters.recursive;
@@ -16,17 +15,22 @@ import static dev.langchain4j.data.document.splitter.DocumentSplitters.recursive
 @ApplicationScoped
 public class EmbeddingProvider {
 
-    @Inject
-    PgVectorEmbeddingStore store;
+    private final PgVectorEmbeddingStore store;
 
-    @Inject
-    EmbeddingModel model;
+    private final EmbeddingModel model;
 
-    @ConfigProperty(name = "rag.retrieval.max-results", defaultValue = "15")
-    int maxResults;
+    private final int maxResults;
 
-    @ConfigProperty(name = "rag.retrieval.min-score", defaultValue = "0.75")
-    double minScore;
+    private final double minScore;
+
+    public EmbeddingProvider(PgVectorEmbeddingStore store, EmbeddingModel model,
+                             @ConfigProperty(name = "rag.retrieval.max-results", defaultValue = "15") int maxResults,
+                             @ConfigProperty(name = "rag.retrieval.min-score", defaultValue = "0.75") double minScore) {
+        this.store = store;
+        this.model = model;
+        this.maxResults = maxResults;
+        this.minScore = minScore;
+    }
 
     @Produces
     public EmbeddingStoreIngestor createIngestor() {

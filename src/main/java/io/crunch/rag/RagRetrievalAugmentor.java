@@ -4,15 +4,17 @@ import dev.langchain4j.rag.DefaultRetrievalAugmentor;
 import dev.langchain4j.rag.RetrievalAugmentor;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 import java.util.function.Supplier;
 
 @ApplicationScoped
 public class RagRetrievalAugmentor implements Supplier<RetrievalAugmentor> {
 
-    @Inject
-    EmbeddingStoreContentRetriever contentRetriever;
+    private final EmbeddingStoreContentRetriever contentRetriever;
+
+    public RagRetrievalAugmentor(EmbeddingStoreContentRetriever contentRetriever) {
+        this.contentRetriever = contentRetriever;
+    }
 
     @Override
     public RetrievalAugmentor get() {
