@@ -1,12 +1,12 @@
 package io.crunch.rag;
 
+import io.smallrye.mutiny.Multi;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.jboss.resteasy.reactive.RestQuery;
-import org.jboss.resteasy.reactive.RestResponse;
 
 @Path("/rag")
 @Produces(MediaType.APPLICATION_JSON)
@@ -26,11 +26,11 @@ public class DocumentRetrieverResource {
      * as a plain string.
      *
      * @param question the user's natural language question passed as a query parameter
-     * @return a {@link RestResponse} containing the generated answer
+     * @return a {@link Multi} containing the generated answer as a stream of strings.
      */
     @GET
-    public RestResponse<String> retrieve(@RestQuery String question) {
-        var answer = ragAssistant.answer(question);
-        return RestResponse.ok(answer);
+    @Produces(MediaType.TEXT_PLAIN)
+    public Multi<String> retrieve(@RestQuery("question") String question) {
+        return ragAssistant.answer(question);
     }
 }

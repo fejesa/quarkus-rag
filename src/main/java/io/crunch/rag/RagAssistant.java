@@ -3,28 +3,26 @@ package io.crunch.rag;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
+import io.smallrye.mutiny.Multi;
 
 /**
- * {@code RagAssistant} defines a conversational AI interface for answering user queries, powered by Retrieval-Augmented Generation (RAG).
+ * {@code RagAssistant} defines a Quarkus AI service interface for performing Retrieval-Augmented Generation (RAG) queries.
  * <p>
- * This interface is annotated with {@link RegisterAiService}, making it a Quarkus-managed AI service
- * that automatically integrates with the LangChain4j runtime. It is configured to use a custom
- * {@code RetrievalAugmentor} implementation ({@link RagRetrievalAugmentor}) to inject contextually relevant
- * documents during prompt construction.
- *
- * <p>Features
+ * This interface is registered as an AI service via the
+ * {@link RegisterAiService @RegisterAiService} annotation and is backed by a
+ * {@link RagRetrievalAugmentor} to enhance responses with relevant contextual data retrieved
+ * from an external source or knowledge base.
+ * </p>
+ * Key Characteristics
  * <ul>
- *   <li>Leverages document embeddings via RAG to enhance the accuracy and contextuality of answers</li>
- *   <li>Supports declarative prompt configuration using LangChain4j annotations</li>
+ *   <li><strong>RAG Integration:</strong> Uses {@code RagRetrievalAugmentor} to perform
+ *       context retrieval before generating answers, enabling more accurate and context-aware responses.</li>
+ *   <li><strong>Streaming Output:</strong> The response type is {@link Multi}&lt;{@link String}&gt;,
+ *       which allows partial responses (chunks) to be streamed to the client as they are produced by the LLM.</li>
  * </ul>
- *
- * This interface is used by simply injecting it where needed in your Quarkus application:
- * <pre>{@code
- * @Inject
- * RagAssistant assistant;
- *
- * String answer = assistant.answer("How does DNS work?");
- * }</pre>
+ * @see RagRetrievalAugmentor
+ * @see RegisterAiService
+ * @see Multi
  * @apiNote Defining the retrieval augmentor is not required if there is only one registered in the application.
  */
 @RegisterAiService(retrievalAugmentor = RagRetrievalAugmentor.class)
@@ -43,5 +41,5 @@ public interface RagAssistant {
     - Provide detailed explanations and precise answers to any question that is related to the IT domain or the content of the loaded documents.
     """
     )
-    String answer(@UserMessage String question);
+    Multi<String> answer(@UserMessage String question);
 }
