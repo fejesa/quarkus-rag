@@ -11,11 +11,11 @@ import org.jboss.resteasy.reactive.RestQuery;
 @Path("/rag")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class DocumentRetrieverResource {
+public class RagResource {
 
     private final RagAssistant ragAssistant;
 
-    public DocumentRetrieverResource(RagAssistant ragAssistant) {
+    public RagResource(RagAssistant ragAssistant) {
         this.ragAssistant = ragAssistant;
     }
 
