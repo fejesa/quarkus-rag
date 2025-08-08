@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,8 +46,9 @@ public class DocumentLoader {
 
     public DocumentLoader(@ConfigProperty(name = "rag.document.location") Path folderPath,
                           DocumentIngestor documentIngestor) {
-        this.folderPath = folderPath;
+        this.folderPath = Paths.get(".").resolve(folderPath).toAbsolutePath().normalize();
         this.documentIngestor = documentIngestor;
+        Log.info("Document folder: " + this.folderPath);
     }
 
     @Scheduled(every = "{rag.document.loader.scheduler.period:60s}", delay = 10, delayUnit = TimeUnit.SECONDS, concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
