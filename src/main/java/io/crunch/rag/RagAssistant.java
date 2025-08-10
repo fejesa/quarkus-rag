@@ -38,7 +38,6 @@ public interface RagAssistant {
       - Cybersecurity
       - Cloud computing
       - IT architecture
-    - Provide detailed explanations and precise answers to any question that is related to the IT domain or the content of the loaded documents.
     """
     )
     Multi<String> answer(@UserMessage String question);
