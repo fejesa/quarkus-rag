@@ -205,6 +205,86 @@ class RagResourceTest {
 
 That’s it — one test sends a real question to the endpoint and verifies that the response includes the expected keywords. Quick, clear feedback on whether the pipeline is working.
 
+## Installation
+### Prerequisites
+- JDK 21 or higher
+- Maven 3.5+
+- Docker
+- [Ollama](https://ollama.com) installed
+- [httpie](https://httpie.io/) installed (optional, but useful for testing)
+
+### Steps
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/fejesa/quarkus-rag.git
+    ```
+2. Build the project:
+   ```sh
+   mvn clean install
+   ```
+3. Run the application in development mode:
+   ```sh
+    mvn quarkus:dev
+    ```
+**Note**: No need to run neither the Ollama nor the PostgreSQL manually — Quarkus Dev mode will automatically start them for you. If the LLM models are not available locally, Quarkus will download them automatically, but this may take some time.
+
+## Configuration
+The application can be configured via `application.properties`. The following properties are available:
+```properties
+# PostgreSQL database automatically created by Dev Services with the following settings
+quarkus.devservices.enabled = true
+quarkus.datasource.devservices.port = 5432
+quarkus.datasource.devservices.db-name = rag
+quarkus.datasource.devservices.username = rag
+quarkus.datasource.devservices.password = rag
+# Run Flyway database schema migrations automatically
+quarkus.flyway.migrate-at-start = true
+
+# The dimension of the embedding vectors. This has to be the same as the dimension of vectors produced by the embedding model that you use.
+quarkus.langchain4j.pgvector.dimension = 768
+# The table name for storing embeddings - see V1__create_schema.sql
+quarkus.langchain4j.pgvector.table = embedding_item
+# Used if the table and index are created automatically by langchain4j
+quarkus.langchain4j.pgvector.use-index = true
+quarkus.langchain4j.pgvector.index-list-size= 100
+
+quarkus.langchain4j.log-requests = true
+quarkus.langchain4j.log-responses = true
+quarkus.langchain4j.ollama.log-requests = true
+quarkus.langchain4j.ollama.log-responses = true
+# The temperature to use for the chat model. Temperature is a value between 0 and 1, where lower values make the model more deterministic and higher values make it more creative.
+quarkus.langchain4j.temperature = 0.2
+# Global timeout for requests to LLM APIs
+quarkus.langchain4j.timeout = 30s
+
+# The chat model to use. In case of Ollama, llama3.1 is the default chat model.
+quarkus.langchain4j.ollama.chat-model.model-id = llama3.1
+# The format to return a response in. Format can be json or a JSON schema, or text; in this application, we use text.
+quarkus.langchain4j.ollama.chat-model.format = text
+# In case of Ollama, nomic-embed-text is the default model used for text embeddings.
+quarkus.langchain4j.ollama.embedding-model.model-id = nomic-embed-text
+
+# The location of the documents to be processed; can be relative or absolute path.
+rag.document.location = ./documents
+# The document loader scheduler period; default is 60 seconds
+rag.document.loader.scheduler.period = 10s
+# The maximum length (in characters) of a document segment used during ingestion. Default is 550 characters.
+rag.embedding.max-segment-size = 500
+# The maximum number of characters that can overlap between two segments. Default is 25 characters.
+rag.embedding.max-overlap-size = 25
+# The maximum number of retrieved embeddings when querying for relevant documents. Default is 200.
+rag.retrieval.max-results = 200
+# The minimum cosine similarity score for a document to be considered relevant during retrieval. Score ranges between 0 (no similarity) and 1 (identical). Default is 0.8.
+rag.retrieval.min-score = 0.8
+```
+
+## Usage
+If you have some PDF files that you want to process, place them in the `documents` directory in the project root. The application will automatically pick them up and start processing them. Once the application is running, you can ask AI from command line using for example [httpie](https://httpie.io/) or [curl](https://curl.se/).
+```sh
+http --stream -v localhost:8080/rag question=="What are the benefits of Quarkus for the Spring developers?" | grep -v '^$'
+```
+LLM needs some time to process the request, so you will see the response in chunks as they arrive. The `--stream` option is important here, as it allows you to see the response in real-time.
+
 ## **Final Thoughts**
 For me, this project was more than just code — it was about exploring the edge where Java meets AI.
 I started with no ML background. I ended up with a working **local RAG assistant** that understands my personal library of documents.
