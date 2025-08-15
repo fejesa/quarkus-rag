@@ -45,4 +45,3 @@ nb-configuration.xml
 /.quarkus/cli/plugins/
 
 postgres-data/*
-documents/**
