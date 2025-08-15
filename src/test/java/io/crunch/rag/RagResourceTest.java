@@ -1,16 +1,19 @@
 package io.crunch.rag;
 
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import org.awaitility.Durations;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @QuarkusTest
+@QuarkusTestResource(OllamaTestResource.class)
 @TestProfile(RagTestProfile.class)
 class RagResourceTest {
 
@@ -18,8 +21,8 @@ class RagResourceTest {
     void whenAskLLMAboutQuarkusThenResponseContainsKeywords() {
         // Send a question: "What are the benefits of Quarkus?"
         await()
-            .atMost(10, SECONDS)
-            .pollInterval(Durations.TWO_SECONDS)
+            .atMost(1, MINUTES)
+            .pollInterval(Durations.FIVE_SECONDS)
             .untilAsserted(() -> {
                 var response = given()
                     .when()
