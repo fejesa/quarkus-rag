@@ -51,7 +51,7 @@ public class DocumentLoader {
         Log.info("Document folder: " + this.folderPath);
     }
 
-    @Scheduled(every = "{rag.document.loader.scheduler.period:60s}", delay = 10, delayUnit = TimeUnit.SECONDS, concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
+    @Scheduled(every = "{rag.document.loader.scheduler.period:60s}", delay = 2, delayUnit = TimeUnit.SECONDS, concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
     public void load() {
         try (var files = Files.list(folderPath)) {
             files.filter(Files::isRegularFile).forEach(this::processFile);
