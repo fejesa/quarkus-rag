@@ -17,6 +17,7 @@
         <commons-codec.version>1.19.0</commons-codec.version>
         <assertj-core.version>3.27.3</assertj-core.version>
         <awaitility.version>4.3.0</awaitility.version>
+        <tika-core.version>3.2.2</tika-core.version>
         <ollama.testcontainer.version>1.21.3</ollama.testcontainer.version>
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.5.3</surefire-plugin.version>
@@ -88,7 +89,7 @@
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-core</artifactId>
-            <version>3.2.2</version>
+            <version>${tika-core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
