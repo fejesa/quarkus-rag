@@ -281,7 +281,7 @@ rag.retrieval.min-score = 0.8
 ## Usage
 If you have some PDF files that you want to process, place them in the `documents` directory in the project root. The application will automatically pick them up and start processing them. Once the application is running, you can ask AI from command line using for example [httpie](https://httpie.io/) or [curl](https://curl.se/).
 ```sh
-http --stream -v localhost:8080/rag question=="What are the benefits of Quarkus for the Spring developers?" | grep -v '^$'
+http --stream -v localhost:8080/rag question=="What are the benefits of Quarkus for the Spring developers? Describe it in 10 bullet points, and give back the name of the document that used for the answer." | grep -v '^$'
 ```
 LLM needs some time to process the request, so you will see the response in chunks as they arrive. The `--stream` option is important here, as it allows you to see the response in real-time.
 
