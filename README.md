@@ -255,10 +255,10 @@ quarkus.langchain4j.ollama.log-responses = true
 # The temperature to use for the chat model. Temperature is a value between 0 and 1, where lower values make the model more deterministic and higher values make it more creative.
 quarkus.langchain4j.temperature = 0.2
 # Global timeout for requests to LLM APIs
-quarkus.langchain4j.timeout = 30s
+quarkus.langchain4j.timeout = 60s
 
 # The chat model to use. In case of Ollama, llama3.1 is the default chat model.
-quarkus.langchain4j.ollama.chat-model.model-id = llama3.1
+quarkus.langchain4j.ollama.chat-model.model-id = gpt-oss
 # The format to return a response in. Format can be json or a JSON schema, or text; in this application, we use text.
 quarkus.langchain4j.ollama.chat-model.format = text
 # In case of Ollama, nomic-embed-text is the default model used for text embeddings.
