@@ -231,6 +231,7 @@ That’s it — one test sends a real question to the endpoint and verifies that
 ## Configuration
 The application can be configured via `application.properties`. The following properties are available:
 ```properties
+quarkus.http.port = 8080
 # PostgreSQL database automatically created by Dev Services with the following settings
 quarkus.devservices.enabled = true
 quarkus.datasource.devservices.port = 5432
@@ -250,12 +251,10 @@ quarkus.langchain4j.pgvector.index-list-size= 100
 
 quarkus.langchain4j.log-requests = true
 quarkus.langchain4j.log-responses = true
-quarkus.langchain4j.ollama.log-requests = true
-quarkus.langchain4j.ollama.log-responses = true
 # The temperature to use for the chat model. Temperature is a value between 0 and 1, where lower values make the model more deterministic and higher values make it more creative.
 quarkus.langchain4j.temperature = 0.2
 # Global timeout for requests to LLM APIs
-quarkus.langchain4j.timeout = 60s
+quarkus.langchain4j.timeout = 120s
 
 # The chat model to use. In case of Ollama, llama3.1 is the default chat model.
 quarkus.langchain4j.ollama.chat-model.model-id = gpt-oss
@@ -263,6 +262,10 @@ quarkus.langchain4j.ollama.chat-model.model-id = gpt-oss
 quarkus.langchain4j.ollama.chat-model.format = text
 # In case of Ollama, nomic-embed-text is the default model used for text embeddings.
 quarkus.langchain4j.ollama.embedding-model.model-id = nomic-embed-text
+# Whether embedding model requests should be logged; default is false
+quarkus.langchain4j.ollama.embedding-model.log-requests = true
+# Whether embedding model responses should be logged; default is false
+quarkus.langchain4j.ollama.embedding-model.log-responses=true
 
 # The location of the documents to be processed; can be relative or absolute path.
 rag.document.location = ./documents
@@ -276,12 +279,24 @@ rag.embedding.max-overlap-size = 25
 rag.retrieval.max-results = 200
 # The minimum cosine similarity score for a document to be considered relevant during retrieval. Score ranges between 0 (no similarity) and 1 (identical). Default is 0.8.
 rag.retrieval.min-score = 0.8
+
+# LangFuse OpenTelemetry settings
+quarkus.otel.enabled = true
+quarkus.otel.metrics.enabled = true
+# OpenTelemetry defines the encoding of telemetry data and the protocol used to exchange data between the client and the server. Default is grpc.
+quarkus.otel.exporter.otlp.protocol=http/protobuf
+# LangFuse OpenTelemetry endpoint and authorization header; set your own values here
+quarkus.otel.exporter.otlp.headers = Authorization=Basic ***
+quarkus.otel.exporter.otlp.endpoint = http://localhost:3000/api/public/otel
+quarkus.otel.exporter.otlp.logs.protocol=http/protobuf
+quarkus.langchain4j.tracing.include-prompt = true
+quarkus.langchain4j.tracing.include-completion = true
 ```
 
 ## Usage
 If you have some PDF files that you want to process, place them in the `documents` directory in the project root. The application will automatically pick them up and start processing them. Once the application is running, you can ask AI from command line using for example [httpie](https://httpie.io/) or [curl](https://curl.se/).
 ```sh
-http --stream -v localhost:8080/rag question=="What are the benefits of Quarkus for the Spring developers? Describe it in 10 bullet points, and give back the name of the document that used for the answer." | grep -v '^$'
+http --stream -v localhost:8080/rag question=="What are the benefits of Quarkus for the Spring developers? Describe it in 10 bullet points, and give back the name of the documents that used for the generating the answer." | grep -v '^$'
 ```
 LLM needs some time to process the request, so you will see the response in chunks as they arrive. The `--stream` option is important here, as it allows you to see the response in real-time.
 
