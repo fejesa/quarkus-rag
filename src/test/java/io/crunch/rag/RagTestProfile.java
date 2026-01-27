@@ -10,6 +10,7 @@ public class RagTestProfile implements QuarkusTestProfile {
     public Map<String, String> getConfigOverrides() {
         return Map.of(
                 "quarkus.langchain4j.ollama.chat-model.model-id", "tinyllama",
-                "quarkus.otel.enabled", "false");
+                "quarkus.otel.enabled", "false",
+                "quarkus.otel.metrics.enabled", "false");
     }
 }

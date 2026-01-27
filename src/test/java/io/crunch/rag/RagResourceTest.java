@@ -1,6 +1,5 @@
 package io.crunch.rag;
 
-import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import org.awaitility.Durations;
@@ -12,7 +11,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @QuarkusTest
-@QuarkusTestResource(OllamaTestResource.class)
 @TestProfile(RagTestProfile.class)
 class RagResourceTest {
 

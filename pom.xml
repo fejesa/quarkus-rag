@@ -12,13 +12,12 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.29.4</quarkus.platform.version>
-        <quarkus-langchain4j.version>1.4.2</quarkus-langchain4j.version>
-        <langchain4j-document-parser.version>1.8.0-beta15</langchain4j-document-parser.version>
-        <commons-codec.version>1.19.0</commons-codec.version>
-        <assertj-core.version>3.27.6</assertj-core.version>
+        <quarkus.platform.version>3.30.8</quarkus.platform.version>
+        <quarkus-langchain4j.version>1.6.0.CR1</quarkus-langchain4j.version>
+        <langchain4j-document-parser.version>1.10.0-beta18</langchain4j-document-parser.version>
+        <commons-codec.version>1.20.0</commons-codec.version>
+        <assertj-core.version>3.27.7</assertj-core.version>
         <awaitility.version>4.3.0</awaitility.version>
-        <ollama.testcontainer.version>1.21.3</ollama.testcontainer.version>
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.5.3</surefire-plugin.version>
     </properties>
@@ -118,12 +117,6 @@
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
             <version>${awaitility.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>ollama</artifactId>
-            <version>${ollama.testcontainer.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
